@@ -8,14 +8,15 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>3.2.5</version>
         <relativePath/>
     </parent>
     
-    <groupId>com.ws101.gepollo-rapsing</groupId>
+    <groupId>com.ws181.gepollo-rapsing</groupId>
     <artifactId>ecommerceapi</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ecommerceapi</name>
+    <packaging>jar</packaging>
     
     <properties>
         <java.version>21</java.version>
@@ -45,6 +46,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <excludes>
                         <exclude>
