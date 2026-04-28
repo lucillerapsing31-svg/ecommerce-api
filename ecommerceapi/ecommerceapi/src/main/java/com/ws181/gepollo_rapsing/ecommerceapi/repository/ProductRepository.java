@@ -9,12 +9,12 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     
-    // This method is needed for filtering by category
-    List<Product> findByCategory(String category);
+    // Finds products by category name
+    List<Product> findByCategoryName(String categoryName);
     
-    // This method is needed for filtering by name
+    // Finds products by name containing keyword
     List<Product> findByNameContainingIgnoreCase(String name);
     
-    // This method is needed for filtering by price range
+    // Finds products within a price range
     List<Product> findByPriceBetween(double min, double max);
 }
