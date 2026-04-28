@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | ShopEase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Create an Account</h1>
+        <nav>
+            <ul>
+                <li><a href="landing.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a> <span id="cart-count"></span></li>
+                <li><a href="account.html">Already have an account? Sign in</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <form class="signup-form">
+            <div>
+                <label for="fullname">Full name:</label>
+                <input type="text" id="fullname" name="fullname" required>
+            </div>
+
+            <div>
+                <label for="email">Email address:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required minlength="8">
+            </div>
+
+            <div>
+                <label for="confirm-password">Confirm password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        
+        <p>Already registered? <a href="account.html">Go to your account →</a></p>
+    </main>
+    
+    <hr>
+    <footer>
+        <p><a href="landing.html">Home</a> | <a href="products.html">Shop</a> | <a href="account.html">Sign In</a></p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

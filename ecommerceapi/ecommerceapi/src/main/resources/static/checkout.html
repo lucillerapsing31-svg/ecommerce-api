@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | ShopEase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="landing.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="products.html?category=clothing">Clothing</a></li>
+                <li><a href="products.html?category=electronics">Electronics</a></li>
+                <li><a href="products.html?category=books">Books</a></li>
+                <li><a href="products.html?category=sale">Sale</a></li>
+                <li><a href="cart.html">Cart</a> <span id="cart-count"></span></li>
+                <li><a href="account.html">Account</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <h1>Checkout</h1>
+    
+    <div class="checkout-container">
+        <div class="checkout-form">
+            <form id="checkout-form">
+                <fieldset>
+                    <legend>Shipping Address</legend>
+                    
+                    <label for="name">Full name:</label>
+                    <input type="text" id="name" name="name">
+                    
+                    <label for="street">Street address:</label>
+                    <input type="text" id="street" name="street">
+                    
+                    <label for="zip">ZIP / Postal code:</label>
+                    <input type="text" id="zip" name="zip">
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Payment Method</legend>
+                    
+                    <label><input type="radio" name="payment" value="credit"> Credit Card</label><br>
+                    <label><input type="radio" name="payment" value="paypal"> PayPal</label><br>
+                    <label><input type="radio" name="payment" value="bank"> Bank Transfer</label><br>
+                </fieldset>
+                
+                <button type="submit">Place Order</button>
+            </form>
+        </div>
+        
+        <aside class="order-summary">
+            <h2>Order Summary</h2>
+            <div id="order-items-list"></div>
+            <hr>
+            <p>Subtotal: $<span class="items-total">0.00</span></p>
+            <p>Shipping: $<span class="shipping-cost">0.00</span></p>
+            <p><strong>Total: $<span class="total-amount">0.00</span></strong></p>
+        </aside>
+    </div>
+    
+    <hr>
+    <footer>
+        <p><a href="cart.html">← Back to cart</a> | <a href="products.html">Continue shopping</a> | <a href="account.html">My Account</a></p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

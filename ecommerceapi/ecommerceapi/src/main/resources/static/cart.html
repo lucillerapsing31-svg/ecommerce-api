@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | ShopEase</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="landing.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="cart.html">Cart</a> <span id="cart-count"></span></li>
+                <li><a href="account.html">Account</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <h1>Shopping Cart</h1>
+    
+    <!-- CHANGED class to ID -->
+    <ul id="cart-list" class="cart-list"></ul>
+
+    <section class="cart-summary">
+        <!-- CHANGED class to ID and changed $ to ₱ -->
+        <h2>Subtotal: ₱<span id="total">0.00</span></h2>
+        <a href="checkout.html" class="checkout-btn" id="checkout-btn">Proceed to Checkout</a>
+    </section>
+    
+    <hr>
+    <footer>
+        <p><a href="products.html">Continue shopping</a> | <a href="account.html">My Account</a> | <a href="signup.html">Sign Up</a></p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

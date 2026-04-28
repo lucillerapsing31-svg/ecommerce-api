@@ -22,16 +22,28 @@ public class ProductService {
     }
 
     private void addSampleProducts() {
-        products.add(new Product(nextId++, "Laptop", "High-performance laptop", 59999.99, "Electronics", 10, "url1"));
-        products.add(new Product(nextId++, "Smartphone", "Latest model smartphone", 29999.99, "Electronics", 25, "url2"));
-        products.add(new Product(nextId++, "T-Shirt", "Cotton t-shirt", 499.99, "Clothing", 50, "url3"));
-        products.add(new Product(nextId++, "Jeans", "Denim jeans", 999.99, "Clothing", 30, "url4"));
-        products.add(new Product(nextId++, "Headphones", "Noise-cancelling headphones", 3499.99, "Electronics", 15, "url5"));
-        products.add(new Product(nextId++, "Sneakers", "Running shoes", 2499.99, "Footwear", 20, "url6"));
-        products.add(new Product(nextId++, "Watch", "Analog wrist watch", 1299.99, "Accessories", 12, "url7"));
-        products.add(new Product(nextId++, "Backpack", "Waterproof backpack", 899.99, "Accessories", 18, "url8"));
-        products.add(new Product(nextId++, "Refrigerator", "Double door fridge", 45999.99, "Appliances", 8, "url9"));
-        products.add(new Product(nextId++, "Blender", "High-speed blender", 1999.99, "Appliances", 22, "url10"));
+        products.add(new Product(nextId++, "Laptop", "High-performance laptop", 59999.99, "electronics", 10, "url1"));
+        products.add(new Product(nextId++, "Smartphone", "Latest model smartphone", 29999.99, "electronics", 25, "url2"));
+        products.add(new Product(nextId++, "T-Shirt", "Cotton t-shirt", 499.99, "clothing", 50, "url3"));
+        products.add(new Product(nextId++, "Jeans", "Denim jeans", 999.99, "clothing", 30, "url4"));
+        products.add(new Product(nextId++, "Headphones", "Noise-cancelling headphones", 3499.99, "electronics", 15, "url5"));
+        products.add(new Product(nextId++, "Sneakers", "Running shoes", 2499.99, "footwear", 20, "url6"));
+        products.add(new Product(nextId++, "Watch", "Analog wrist watch", 1299.99, "accessories", 12, "url7"));
+        products.add(new Product(nextId++, "Backpack", "Waterproof backpack", 899.99, "accessories", 18, "url8"));
+        products.add(new Product(nextId++, "Refrigerator", "Double door fridge", 45999.99, "appliances", 8, "url9"));
+        products.add(new Product(nextId++, "Blender", "High-speed blender", 1999.99, "appliances", 22, "url10"));
+
+        // --- BOOKS ---
+        products.add(new Product(nextId++, "The Great Gatsby", "Classic novel about wealth and love", 450.00, "books", 100, "img/gatsby.jpg"));
+        products.add(new Product(nextId++, "Harry Potter", "A young wizard's journey", 899.00, "books", 80, "img/harrypotter.jpg"));
+        products.add(new Product(nextId++, "Atomic Habits", "Learn how to build good habits", 650.00, "books", 150, "img/atomichabits.jpg"));
+        products.add(new Product(nextId++, "Rich Dad Poor Dad", "Guide to financial intelligence", 380.00, "books", 200, "img/richdad.jpg"));
+
+        // --- SALE ITEMS ---
+        products.add(new Product(nextId++, "Discounted Sneakers", "Limited time offer!", 1499.99, "sale", 15, "img/sneakers.jpg"));
+        products.add(new Product(nextId++, "Clearance T-Shirt", "Buy 1 take 1 promo!", 299.99, "sale", 100, "img/tshirt.jpg"));
+        products.add(new Product(nextId++, "Special Offer Watch", "Discounted price", 799.99, "sale", 20, "img/watch.jpg"));
+        products.add(new Product(nextId++, "Budget Earphones", "Cheap but quality sound", 599.99, "sale", 50, "img/earphones.jpg"));
     }
 
     /**

@@ -1,0 +1,20 @@
+package com.ws181.gepollo_rapsing.ecommerceapi.repository;
+
+import com.ws181.gepollo_rapsing.ecommerceapi.model.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    
+    // This method is needed for filtering by category
+    List<Product> findByCategory(String category);
+    
+    // This method is needed for filtering by name
+    List<Product> findByNameContainingIgnoreCase(String name);
+    
+    // This method is needed for filtering by price range
+    List<Product> findByPriceBetween(double min, double max);
+}
