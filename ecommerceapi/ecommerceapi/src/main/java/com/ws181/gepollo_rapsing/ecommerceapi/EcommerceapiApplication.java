@@ -13,6 +13,4 @@ public class EcommerceapiApplication {
         SpringApplication.run(EcommerceapiApplication.class, args);
     }
 
-    // --- TEMPORARY: REMOVE THIS PART TO REMOVE ERROR ---
-    // We will add products manually later
 }
