@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore; // ADD THIS IMPORT
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,8 @@ public class Category {
     private String name;
 
     // Relationship: One Category has many Products
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // CHANGED TO EAGER
+    @JsonIgnore // ADD THIS LINE HERE
     private List<Product> products = new ArrayList<>();
 
     // Custom constructor for creating with name only

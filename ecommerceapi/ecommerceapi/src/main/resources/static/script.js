@@ -24,21 +24,43 @@ function checkUrlAndLoad() {
     }
 }
 
+async function fetchProducts() {
+    try {
+        const response = await fetch(API_BASE_URL);
+
+        // --- ERROR HANDLING: Check response status ---
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Products not found (Error 404)');
+            }
+            if (response.status === 500) {
+                throw new Error('Server error (Error 500)');
+            }
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        // --- Log specific error messages ---
+        console.error('❌ Error fetching products:', error.message);
+        throw error; // Re-throw to let the calling function handle it
+    }
+}
+
 // --- LOAD ALL PRODUCTS ---
 async function loadAllProducts() {
     try {
-        const response = await fetch(API_BASE_URL);
-        if (!response.ok) throw new Error('Network error');
-        const products = await response.json();
-
+        const products = await fetchProducts();
         displayProducts(products);
         displayFeaturedProducts(products);
 
     } catch (error) {
-        console.error('Error loading products:', error);
+        console.error('Failed to load products:', error);
         const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
         if(productGrid) {
-            productGrid.innerHTML = '<p style="color:red; text-align:center; width:100%;">Failed to load products.</p>';
+            productGrid.innerHTML = '<p style="color:red; text-align:center; width:100%;">Failed to load products. Please try again later.</p>';
         }
     }
 }
@@ -46,21 +68,37 @@ async function loadAllProducts() {
 // --- LOAD BY CATEGORY (For Books, Clothing, etc.) ---
 async function loadProductsByCategory(category) {
     try {
-        const url = `${API_BASE_URL}/filter?filterType=category&filterValue=${category}`;
+        // --- FIX: Capitalize first letter to match database exactly ---
+        const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+        
+        const url = `${API_BASE_URL}/filter?filterType=category&filterValue=${formattedCategory}`;
         const response = await fetch(url);
-        if (!response.ok) throw new Error('Network error');
-        const products = await response.json();
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Category not found (Error 404)');
+            }
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
+        const products = await response.json();
         const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
+        
         if(productGrid) {
+            // --- EMPTY STATE HANDLING ---
             if (products.length === 0) {
-                productGrid.innerHTML = '<p style="color:gray; text-align:center; width:100%;">No products found in this category.</p>';
+                productGrid.innerHTML = '<p style="color:gray; text-align:center; width:100%; padding: 20px;">No products available in this category.</p>';
             } else {
                 displayProducts(products);
             }
         }
+
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error loading category:', error.message);
+        const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
+        if(productGrid) {
+            productGrid.innerHTML = '<p style="color:red; text-align:center; width:100%;">Failed to load category.</p>';
+        }
     }
 }
 
@@ -69,13 +107,20 @@ function displayProducts(products) {
     const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
     if (!productGrid) return;
 
+    // --- EMPTY STATE HANDLING ---
+    if (!products || products.length === 0) {
+        productGrid.innerHTML = '<p style="color:gray; text-align:center; width:100%; padding: 20px;">No products available.</p>';
+        return;
+    }
+
+    // --- DYNAMIC RENDERING ---
     productGrid.innerHTML = products.map(product => `
         <div class="product-card">
             <div class="product-image">
                 <img src="${product.imageUrl || 'https://via.placeholder.com/200x200?text=No+Image'}" alt="${product.name}">
             </div>
             <h3>${product.name}</h3>
-            <p class="category">${product.category}</p>
+            <p class="category">${product.category ? product.category.name : 'Uncategorized'}</p>
             <p class="description">${product.description}</p>
             <p class="price">₱${product.price.toFixed(2)}</p>
             <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
@@ -128,7 +173,6 @@ function setupEventListeners() {
     const form = document.getElementById('filter-form');
     const checkoutBtn = document.getElementById('checkout-btn');
 
-    // FIX: Apply Filters now works correctly
     if(applyBtn) applyBtn.addEventListener('click', applyFilters);
     
     if(resetBtn) resetBtn.addEventListener('click', () => {
@@ -144,7 +188,7 @@ function setupEventListeners() {
     }
 }
 
-// --- NEW FUNCTION: APPLY FILTERS ---
+// --- APPLY FILTERS ---
 async function applyFilters() {
     try {
         const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
@@ -154,11 +198,11 @@ async function applyFilters() {
         let url = API_BASE_URL;
 
         if (selectedCategories.length > 0) {
-            // Filter by selected category
-            url = `${API_BASE_URL}/filter?filterType=category&filterValue=${selectedCategories[0]}`;
+            // Also fix capitalization here for filter checkboxes
+            const formattedCategory = selectedCategories[0].charAt(0).toUpperCase() + selectedCategories[0].slice(1);
+            url = `${API_BASE_URL}/filter?filterType=category&filterValue=${formattedCategory}`;
         } 
         else if (selectedPrice && selectedPrice !== 'all') {
-            // Filter by price range
             let min, max;
             switch(selectedPrice) {
                 case 'under30': min = 0; max = 30; break;
@@ -169,7 +213,7 @@ async function applyFilters() {
         }
 
         const response = await fetch(url);
-        if (!response.ok) throw new Error('Network error');
+        if (!response.ok) throw new Error('Filter error');
         const products = await response.json();
 
         const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
@@ -182,7 +226,7 @@ async function applyFilters() {
         }
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error applying filters:', error);
     }
 }
 

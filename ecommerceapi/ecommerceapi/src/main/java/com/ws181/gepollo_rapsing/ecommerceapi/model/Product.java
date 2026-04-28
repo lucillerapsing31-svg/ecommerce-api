@@ -31,7 +31,8 @@ public class Product {
     private String imageUrl; // optional
 
     // Relationship: Many Products belong to one Category
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER) // CHANGED FROM LAZY TO EAGER
     @JoinColumn(name = "category_id")
+    // REMOVED @JsonIgnore HERE SO CATEGORY SHOWS UP
     private Category category;
 }
