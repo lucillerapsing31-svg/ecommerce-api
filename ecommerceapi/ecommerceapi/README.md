@@ -79,6 +79,7 @@ order_items	    id, quantity, price, product_id, order_id
 users	          id, username, password, email, role
 
 <img width="1531" height="762" alt="database_table png" src="https://github.com/user-attachments/assets/8b839c29-f029-48ac-bb72-0561e59c8190" />
+<img width="1801" height="714" alt="browser_console png" src="https://github.com/user-attachments/assets/cd00e071-d5c9-45bd-a2a8-2a631e04a124" />
 
 
 
