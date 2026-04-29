@@ -78,8 +78,8 @@ orders	        id, orderDate, totalAmount, user_id
 order_items	    id, quantity, price, product_id, order_id
 users	          id, username, password, email, role
 
-c:\Users\acer\OneDrive\Pictures\Screenshots\database_table.png.png
-c:\Users\acer\OneDrive\Pictures\Screenshots\browser_console.png.png
+![Database Table](database_table.png)
+![Browser Console](browser_console.png)
 
 
 
