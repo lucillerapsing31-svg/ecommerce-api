@@ -3,7 +3,6 @@
 ## Project Overview
 This is a RESTful API built with Spring Boot for managing an e-commerce product catalog. It supports standard CRUD operations, filtering, and data validation.
 
----
 
 ## Setup Instructions
 
@@ -30,17 +29,17 @@ This is a RESTful API built with Spring Boot for managing an e-commerce product 
    Base URL: http://localhost:8080/api/v1
 
 
-API Endpoints
-   | Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| GET | `/products` | Get all products |
-| GET | `/products/{id}` | Get product by ID |
-| POST | `/products` | Create new product |
-| PUT | `/products/{id}` | Update product |
-| DELETE | `/products/{id}` | Delete product |
-| GET | `/products/filter/name` | Filter by name |
-| GET | `/products/filter/category` | Filter by category |
-| GET | `/products/filter/price` | Filter by price range |
+# API Endpoints
+Method  | Endpoint                    | Description 
+
+ GET    | `/products`                 | Get all products 
+ GET    | `/products/{id}`            | Get product by ID 
+ POST   |  `/products`                | Create new product 
+ PUT    | `/products/{id}`            | Update product 
+ DELETE | `/products/{id}`            | Delete product
+ GET    | `/products/filter/name`     | Filter by name 
+ GET    | `/products/filter/category` | Filter by category 
+ GET    | `/products/filter/price`    | Filter by price range 
 
 Example Request (POST /products)
 Body:
