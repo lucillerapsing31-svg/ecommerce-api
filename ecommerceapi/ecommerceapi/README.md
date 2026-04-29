@@ -78,9 +78,8 @@ orders	        id, orderDate, totalAmount, user_id
 order_items	    id, quantity, price, product_id, order_id
 users	          id, username, password, email, role
 
-![Database Table](database_table.png)
-![Browser Console](browser_console.png)
-
+![Database Table](database_table.png.png)
+![Browser Console](browser_console.png.png)
 
 
 # Contributors:
