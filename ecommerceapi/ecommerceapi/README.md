@@ -56,6 +56,35 @@ Error Handling
 ProductNotFoundException: Custom exception returned when product ID is not found.
 Uses standard HTTP Status Codes: 200 OK, 404 Not Found, 400 Bad Request.
 
-Contributors:
+## Database Schema
+
+  Table Name | Columns 
+
+  products   | id, name, description, price, stockQuantity, imageUrl, category_id 
+  categories | id, name 
+  orders     | id, orderDate, totalAmount, user_id 
+  order_items| id, quantity, price, product_id, order_id 
+  users      | id, username, password, email, role 
+
+# Relationships:
+- One Category → Many Products
+- One Order → Many Order Items
+- One Product → Many Order Items 
+
+Table Name	    Columns
+products	      id, name, description, price, stockQuantity, imageUrl, category_id
+categories	    id, name
+orders	        id, orderDate, totalAmount, user_id
+order_items	    id, quantity, price, product_id, order_id
+users	          id, username, password, email, role
+
+
+![Database Table](c:/Users/acer/OneDrive/Pictures/Screenshots/database_table.png.png)
+
+![Browser Console](c:/Users/acer/OneDrive/Pictures/Screenshots/browser_console.png)
+
+
+
+# Contributors:
 Gepollo, Malou C.
 Rapsing, Lucille A.
