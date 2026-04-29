@@ -1,8 +1,8 @@
-// --- CONFIGURATION ---
+// CONFIGURATION
 const API_BASE_URL = 'http://localhost:8080/api/v1/products';
 const SIGNUP_API_URL = 'http://localhost:8080/api/users';
 
-// --- RUN WHEN PAGE LOADS ---
+// RUN WHEN PAGE LOADS
 document.addEventListener('DOMContentLoaded', () => {
     checkUrlAndLoad();
     setupEventListeners();
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayUserName();
 });
 
-// --- CHECK URL FOR CATEGORY & LOAD ---
+//CHECK URL FOR CATEGORY & LOAD
 function checkUrlAndLoad() {
     const urlParams = new URLSearchParams(window.location.search);
     const categoryFromUrl = urlParams.get('category');
@@ -44,12 +44,12 @@ async function fetchProducts() {
 
     } catch (error) {
         // --- Log specific error messages ---
-        console.error('❌ Error fetching products:', error.message);
+        console.error('Error fetching products:', error.message);
         throw error; // Re-throw to let the calling function handle it
     }
 }
 
-// --- LOAD ALL PRODUCTS ---
+//LOAD ALL PRODUCTS
 async function loadAllProducts() {
     try {
         const products = await fetchProducts();
@@ -65,10 +65,10 @@ async function loadAllProducts() {
     }
 }
 
-// --- LOAD BY CATEGORY (For Books, Clothing, etc.) ---
+//LOAD BY CATEGORY (For Books, Clothing, etc.)
 async function loadProductsByCategory(category) {
     try {
-        // --- FIX: Capitalize first letter to match database exactly ---
+        //FIX: Capitalize first letter to match database exactly
         const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
         
         const url = `${API_BASE_URL}/filter?filterType=category&filterValue=${formattedCategory}`;
@@ -85,7 +85,7 @@ async function loadProductsByCategory(category) {
         const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
         
         if(productGrid) {
-            // --- EMPTY STATE HANDLING ---
+            //EMPTY STATE HANDLING
             if (products.length === 0) {
                 productGrid.innerHTML = '<p style="color:gray; text-align:center; width:100%; padding: 20px;">No products available in this category.</p>';
             } else {
@@ -102,18 +102,18 @@ async function loadProductsByCategory(category) {
     }
 }
 
-// --- DISPLAY ALL PRODUCTS ---
+//DISPLAY ALL PRODUCTS
 function displayProducts(products) {
     const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
     if (!productGrid) return;
 
-    // --- EMPTY STATE HANDLING ---
+    // EMPTY STATE HANDLING
     if (!products || products.length === 0) {
         productGrid.innerHTML = '<p style="color:gray; text-align:center; width:100%; padding: 20px;">No products available.</p>';
         return;
     }
 
-    // --- DYNAMIC RENDERING ---
+    //DYNAMIC RENDERING
     productGrid.innerHTML = products.map(product => `
         <div class="product-card">
             <div class="product-image">
@@ -130,7 +130,7 @@ function displayProducts(products) {
     attachCartListeners();
 }
 
-// --- DISPLAY FEATURED & DISCOUNTED ---
+//DISPLAY FEATURED & DISCOUNTED
 function displayFeaturedProducts(products) {
     const featuredContainer = document.getElementById('featured-products');
     const discountedContainer = document.getElementById('discounted-products');
@@ -166,7 +166,7 @@ function displayFeaturedProducts(products) {
     attachCartListeners();
 }
 
-// --- EVENT LISTENERS ---
+//EVENT LISTENERS
 function setupEventListeners() {
     const applyBtn = document.getElementById('apply-filters');
     const resetBtn = document.getElementById('reset-filters');
@@ -188,7 +188,7 @@ function setupEventListeners() {
     }
 }
 
-// --- APPLY FILTERS ---
+//APPLY FILTERS
 async function applyFilters() {
     try {
         const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
@@ -230,7 +230,7 @@ async function applyFilters() {
     }
 }
 
-// --- CART FUNCTIONALITY ---
+//CART FUNCTIONALITY
 function attachCartListeners() {
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -309,7 +309,7 @@ function displayCartItems() {
     });
 }
 
-// --- SIGNUP FUNCTIONALITY ---
+//SIGNUP FUNCTIONALITY
 function setupSignupForm() {
     const signupForm = document.querySelector('.signup-form');
     
@@ -356,7 +356,7 @@ function setupSignupForm() {
     });
 }
 
-// --- DISPLAY USER NAME ---
+//DISPLAY USER NAME
 function displayUserName() {
     const welcomeText = document.querySelector('h1');
     const userName = localStorage.getItem('userName');
