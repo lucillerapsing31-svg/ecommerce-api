@@ -1,6 +1,6 @@
 package com.ws181.gepollo_rapsing.ecommerceapi.model;
 
-import jakarta.persistence.*; // <-- MUST BE jakarta NOT javax
+import jakarta.persistence.*; //MUST BE jakarta NOT javax
 
 @Entity
 @Table(name = "users")
