@@ -78,8 +78,7 @@ orders	        id, orderDate, totalAmount, user_id
 order_items	    id, quantity, price, product_id, order_id
 users	          id, username, password, email, role
 
-![Database Table](database_table.png)
-![Browser Console](browser_console.png)
+<img width="1531" height="762" alt="database_table png" src="https://github.com/user-attachments/assets/8b839c29-f029-48ac-bb72-0561e59c8190" />
 
 
 
