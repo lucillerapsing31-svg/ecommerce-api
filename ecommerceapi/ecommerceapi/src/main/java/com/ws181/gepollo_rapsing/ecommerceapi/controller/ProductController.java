@@ -1,16 +1,20 @@
 package com.ws181.gepollo_rapsing.ecommerceapi.controller;
 
+import com.ws181.gepollo_rapsing.ecommerceapi.dto.CreateProductDto;
+import com.ws181.gepollo_rapsing.ecommerceapi.dto.ProductListingEntry;
 import com.ws181.gepollo_rapsing.ecommerceapi.model.Product;
 import com.ws181.gepollo_rapsing.ecommerceapi.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/products")
-@CrossOrigin(origins = "*") // 👈 ADD THIS LINE HERE
+@CrossOrigin(origins = "*")
 public class ProductController {
 
     private final ProductService productService;
@@ -19,10 +23,11 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // GET all products
+    // ✅ FIXED: GET all products - Returns FULL product objects
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+        List<Product> products = productService.getAllProducts();
+        return ResponseEntity.ok(products);
     }
 
     // GET single product by ID
@@ -49,7 +54,6 @@ public class ProductController {
                 result = productService.filterByName(filterValue);
                 break;
             case "price":
-                // Assuming filterValue is like "min,max"
                 String[] range = filterValue.split(",");
                 double min = Double.parseDouble(range[0]);
                 double max = range.length > 1 ? Double.parseDouble(range[1]) : Double.MAX_VALUE;
@@ -64,9 +68,14 @@ public class ProductController {
 
     // POST create new product
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product created = productService.createProduct(product);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<ProductListingEntry> createProduct(@Valid @RequestBody CreateProductDto dto) {
+        Product created = productService.createProduct(dto);
+        ProductListingEntry response = new ProductListingEntry(
+                created.getId(),
+                created.getName(),
+                created.getPrice()
+        );
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // PUT update entire product

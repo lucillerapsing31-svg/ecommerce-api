@@ -1,19 +1,36 @@
 package com.ws181.gepollo_rapsing.ecommerceapi.exception;
 
-public class ErrorResponse {
-    private int status;
-    private String message;
+import java.time.LocalDateTime;
+import java.util.List;
 
-    public ErrorResponse(int status, String message) {
+public class ErrorResponse {
+    private LocalDateTime timestamp;
+    private int status;
+    private String error;
+    private List<String> errors;
+
+    // Constructor
+    public ErrorResponse(LocalDateTime timestamp, int status, String error, List<String> errors) {
+        this.timestamp = timestamp;
         this.status = status;
-        this.message = message;
+        this.error = error;
+        this.errors = errors;
+    }
+
+    // Getters
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
     public int getStatus() {
         return status;
     }
 
-    public String getMessage() {
-        return message;
+    public String getError() {
+        return error;
+    }
+
+    public List<String> getErrors() {
+        return errors;
     }
 }

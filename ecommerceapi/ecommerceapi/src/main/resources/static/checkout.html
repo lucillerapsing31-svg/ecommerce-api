@@ -68,5 +68,81 @@
     </footer>
     
     <script src="script.js"></script>
+<script>
+
+
+//PROTECT CHECKOUT PAGE
+document.addEventListener('DOMContentLoaded', async () => {
+    // Check if user is logged in
+    const isLoggedIn = await checkAuth();
+    if (!isLoggedIn) {
+        // If not logged in, redirect to login
+        window.location.href = "login.html";
+        return;
+    }
+
+    // IF LOGGED IN, LOAD CHECKOUT CONTENT
+    loadOrderSummary();
+    updateCartCount();
+});
+
+// LOAD ORDER SUMMARY FROM CART
+function loadOrderSummary() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const orderList = document.getElementById('order-items-list');
+    const subtotalEl = document.querySelector('.items-total');
+    const shippingEl = document.querySelector('.shipping-cost');
+    const totalEl = document.querySelector('.total-amount');
+
+    if(cart.length === 0) {
+        orderList.innerHTML = '<p>Your cart is empty.</p>';
+        subtotalEl.textContent = '0.00';
+        shippingEl.textContent = '0.00';
+        totalEl.textContent = '0.00';
+        return;
+    }
+
+    // Fetch product details to show names/prices
+    fetchWithAuth(API_BASE_URL)
+    .then(res => res.json())
+    .then(result => {
+        const allProducts = result.content || result;
+        let html = '';
+        let subtotal = 0;
+
+        cart.forEach(item => {
+            const product = allProducts.find(p => p.id == item.id);
+            if(product) {
+                const price = product.price || 0;
+                const amount = price * item.quantity;
+                subtotal += amount;
+                html += `
+                    <div class="order-item">
+                        <span>${product.name} x ${item.quantity}</span>
+                        <span>₱${amount.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+        });
+
+        const shipping = subtotal > 0 ? 50.00 : 0; // Example shipping cost
+        const total = subtotal + shipping;
+
+        orderList.innerHTML = html;
+        subtotalEl.textContent = subtotal.toFixed(2);
+        shippingEl.textContent = shipping.toFixed(2);
+        totalEl.textContent = total.toFixed(2);
+    });
+}
+
+// HANDLE FORM SUBMIT
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('✅ Order placed successfully! Thank you for shopping.');
+    localStorage.removeItem('cart');
+    updateCartCount();
+    window.location.href = "products.html";
+});
+</script>
 </body>
 </html>

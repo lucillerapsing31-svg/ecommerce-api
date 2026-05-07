@@ -4,6 +4,7 @@ import com.ws181.gepollo_rapsing.ecommerceapi.model.Category;
 import com.ws181.gepollo_rapsing.ecommerceapi.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize; // ✅ ADD THIS IMPORT
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,13 +20,13 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    // GET all categories
+    // GET all categories - Everyone can view
     @GetMapping
     public ResponseEntity<List<Category>> getAllCategories() {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
-    // GET single category by ID
+    // GET single category by ID - Everyone can view
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
         return categoryService.getCategoryById(id)
@@ -33,14 +34,16 @@ public class CategoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST create new category
+    // POST create new category - ONLY ADMIN
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody Category category) {
         Category created = categoryService.createCategory(category);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    // PUT update category
+    // PUT update category - ONLY ADMIN
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
         return categoryService.updateCategory(id, category)
@@ -48,7 +51,8 @@ public class CategoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE category
+    // DELETE category - ONLY ADMIN
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         if (categoryService.deleteCategory(id)) {

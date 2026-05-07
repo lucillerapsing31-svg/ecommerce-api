@@ -20,7 +20,11 @@
     </header>
 
     <main>
-        <form class="signup-form">
+        <form class="signup-form" id="signupForm">
+            
+            <!-- ✅ CSRF TOKEN HIDDEN FIELD -->
+            <input type="hidden" id="csrfToken" name="_csrf" />
+
             <div>
                 <label for="fullname">Full name:</label>
                 <input type="text" id="fullname" name="fullname" required>
@@ -41,6 +45,16 @@
                 <input type="password" id="confirm-password" name="confirm-password" required>
             </div>
 
+            <!-- ROLE SELECTION -->
+            <div>
+                <label for="role">Register as:</label>
+                <select id="role" name="role" required>
+                    <option value="ROLE_USER">User</option>
+                    <option value="ROLE_SELLER">Seller</option>
+                    <option value="ROLE_ADMIN">Admin</option>
+                </select>
+            </div>
+
             <button type="submit">Sign Up</button>
         </form>
         
@@ -52,6 +66,58 @@
         <p><a href="landing.html">Home</a> | <a href="products.html">Shop</a> | <a href="account.html">Sign In</a></p>
     </footer>
     
+    <script>
+        // Function to get cookie value
+        function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const csrfToken = getCookie('XSRF-TOKEN');
+
+            const data = {
+                fullname: fullname,
+                email: email,
+                password: password,
+                role: role
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/api/v1/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-XSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(data),
+                    credentials: 'include'
+                });
+
+                if(response.ok) {
+                    alert('Account created successfully!');
+                    window.location.href = 'login.html';
+                } else {
+                    const err = await response.json();
+                    alert('Error: ' + (err.message || 'Failed to create account'));
+                }
+            } catch(err) {
+                alert('Error: ' + err.message);
+            }
+        });
+
+        // Load token on page start
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('http://localhost:8080/login', { credentials: 'include' });
+        });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

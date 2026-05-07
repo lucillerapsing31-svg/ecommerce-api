@@ -7,10 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * Entity representing a Product in the e-commerce system.
- * Each Product belongs to one Category.
- */
 @Entity
 @Table(name = "products")
 @Getter
@@ -28,11 +24,11 @@ public class Product {
     private String description;
     private double price;
     private int stockQuantity;
-    private String imageUrl; // optional
+    private String imageUrl;
 
-    // Relationship: Many Products belong to one Category
-    @ManyToOne(fetch = FetchType.EAGER) // CHANGED FROM LAZY TO EAGER
+    // CHANGED TO EAGER
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    // REMOVED @JsonIgnore HERE SO CATEGORY SHOWS UP
+    // REMOVE @JsonManagedReference HERE
     private Category category;
 }

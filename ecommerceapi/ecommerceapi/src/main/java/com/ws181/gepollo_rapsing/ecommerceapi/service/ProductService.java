@@ -1,6 +1,9 @@
 package com.ws181.gepollo_rapsing.ecommerceapi.service;
 
+import com.ws181.gepollo_rapsing.ecommerceapi.dto.CreateProductDto;
+import com.ws181.gepollo_rapsing.ecommerceapi.model.Category;
 import com.ws181.gepollo_rapsing.ecommerceapi.model.Product;
+import com.ws181.gepollo_rapsing.ecommerceapi.repository.CategoryRepository;
 import com.ws181.gepollo_rapsing.ecommerceapi.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +17,14 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
-    // Inject the Repository
+    // Inject Repositories
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     // Constructor injection
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     /**
@@ -40,11 +45,24 @@ public class ProductService {
     }
 
     /**
-     * Saves a new product to the database.
-     * @param product The product to save.
+     * Saves a new product from DTO data.
+     * @param dto The data transfer object containing product info.
      * @return The saved product with generated ID.
      */
-    public Product createProduct(Product product) {
+    public Product createProduct(CreateProductDto dto) {
+        // Find Category by ID
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found with id: " + dto.getCategoryId()));
+
+        // Create new Product object
+        Product product = new Product();
+        product.setName(dto.getName());
+        product.setPrice(dto.getPrice());
+        product.setDescription(dto.getDescription());
+        product.setStockQuantity(10); // Default stock
+        product.setImageUrl(dto.getImageUrl() != null ? dto.getImageUrl() : "");
+        product.setCategory(category);
+
         return productRepository.save(product);
     }
 

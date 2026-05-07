@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API</title>
+</head>
+<body>
+    <h1>Product Test</h1>
+    <div id="products"></div>
+
+    <script>
+        fetch('http://localhost:8080/api/v1/products')
+            .then(res => res.json())
+            .then(data => {
+                const div = document.getElementById('products');
+                if(data && data.length > 0) {
+                    div.innerHTML = '<h2 style="color:green;">SUCCESS! Found ' + data.length + ' products</h2>';
+                    div.innerHTML += '<ul>' + data.map(p => `<li>${p.name} - ₱${p.price}</li>`).join('') + '</ul>';
+                } else {
+                    div.innerHTML = '<h2 style="color:red;">No products found</h2>';
+                }
+            })
+            .catch(err => {
+                document.getElementById('products').innerHTML = '<h2 style="color:red;">Error: ' + err.message + '</h2>';
+            });
+    </script>
+</body>
+</html>

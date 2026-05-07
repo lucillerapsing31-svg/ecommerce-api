@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Sign In</h1>
+        
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="login-email">Email address</label>
+                <input type="email" id="login-email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn">Sign In</button>
+            
+            <p class="link-text">
+                New here? <a href="signup.html">Create an account →</a>
+            </p>
+        </form>
+    </div>
+
+    <script>
+        // Helper to get cookie
+        function getCookie(name) {
+            let value = "; " + document.cookie;
+            let parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Stop normal submit
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const csrfToken = getCookie('XSRF-TOKEN');
+
+            try {
+                const response = await fetch('http://localhost:8080/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-XSRF-TOKEN': csrfToken
+                    },
+                    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+                    credentials: 'include' //Send cookies
+                });
+
+                if(response.ok) {
+                    window.location.href = 'products.html'; // Redirect on success
+                } else {
+                    alert('Login failed! Check email and password.');
+                }
+            } catch(err) {
+                alert('Error: ' + err.message);
+            }
+        });
+
+        // Load token on page start
+        document.addEventListener('DOMContentLoaded', function() {
+            // Visit /login first to get cookie if not present
+            fetch('http://localhost:8080/login', { credentials: 'include' });
+        });
+    </script>
+</body>
+</html>
