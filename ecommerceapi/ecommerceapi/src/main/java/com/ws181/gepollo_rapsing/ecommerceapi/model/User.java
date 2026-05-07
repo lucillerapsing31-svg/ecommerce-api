@@ -1,5 +1,6 @@
 package com.ws181.gepollo_rapsing.ecommerceapi.model;
 
+<<<<<<< HEAD
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+=======
+import jakarta.persistence.*; //MUST BE jakarta NOT javax
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 
 @Entity
 @Table(name = "users")
@@ -45,6 +49,7 @@ public class User implements UserDetails {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+<<<<<<< HEAD
 
     public String getConfirmPassword() { return confirmPassword; }
     public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
@@ -77,3 +82,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() { return true; }
 }
+=======
+}
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5

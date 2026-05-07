@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 // ======================================
 // CONFIGURATION
 // ======================================
+=======
+// CONFIGURATION
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 const API_BASE_URL = 'http://localhost:8080/api/v1/products';
 const SIGNUP_API_URL = 'http://localhost:8080/api/v1/auth/register';
 
+<<<<<<< HEAD
 // ======================================
 // HELPER FUNCTIONS FOR CSRF & HEADERS
 // ======================================
@@ -27,6 +32,9 @@ function getAuthHeaders() {
 // ======================================
 // RUN WHEN PAGE LOADS
 // ======================================
+=======
+// RUN WHEN PAGE LOADS
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Page loaded, initializing...');
     console.log('API_BASE_URL:', API_BASE_URL);
@@ -48,9 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('http://localhost:8080/login', { credentials: 'include' });
 });
 
+<<<<<<< HEAD
 // ======================================
 // CHECK URL FOR CATEGORY & LOAD
 // ======================================
+=======
+//CHECK URL FOR CATEGORY & LOAD
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 function checkUrlAndLoad() {
     const urlParams = new URLSearchParams(window.location.search);
     const categoryFromUrl = urlParams.get('category');
@@ -76,12 +88,77 @@ async function fetchProducts() {
         });
 
         if (!response.ok) {
+<<<<<<< HEAD
+=======
+            if (response.status === 404) {
+                throw new Error('Products not found (Error 404)');
+            }
+            if (response.status === 500) {
+                throw new Error('Server error (Error 500)');
+            }
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        // --- Log specific error messages ---
+        console.error('Error fetching products:', error.message);
+        throw error; // Re-throw to let the calling function handle it
+    }
+}
+
+//LOAD ALL PRODUCTS
+async function loadAllProducts() {
+    try {
+        const products = await fetchProducts();
+        displayProducts(products);
+        displayFeaturedProducts(products);
+
+    } catch (error) {
+        console.error('Failed to load products:', error);
+        const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
+        if(productGrid) {
+            productGrid.innerHTML = '<p style="color:red; text-align:center; width:100%;">Failed to load products. Please try again later.</p>';
+        }
+    }
+}
+
+//LOAD BY CATEGORY (For Books, Clothing, etc.)
+async function loadProductsByCategory(category) {
+    try {
+        //FIX: Capitalize first letter to match database exactly
+        const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+        
+        const url = `${API_BASE_URL}/filter?filterType=category&filterValue=${formattedCategory}`;
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                throw new Error('Category not found (Error 404)');
+            }
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const products = await response.json();
+<<<<<<< HEAD
         console.log("✅ Products fetched:", products.length);
         return products;
+=======
+        const productGrid = document.querySelector('.product-grid:not(#featured-products):not(#discounted-products)');
+        
+        if(productGrid) {
+            //EMPTY STATE HANDLING
+            if (products.length === 0) {
+                productGrid.innerHTML = '<p style="color:gray; text-align:center; width:100%; padding: 20px;">No products available in this category.</p>';
+            } else {
+                displayProducts(products);
+            }
+        }
+
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
     } catch (error) {
         console.error('❌ Error fetching products:', error.message);
         return [];
@@ -191,6 +268,7 @@ async function loadAllProducts() {
     }
 }
 
+<<<<<<< HEAD
 // LOAD BY CATEGORY
 async function loadProductsByCategory(category) {
     try {
@@ -213,18 +291,29 @@ async function loadProductsByCategory(category) {
 }
 
 // DISPLAY ALL PRODUCTS
+=======
+//DISPLAY ALL PRODUCTS
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 function displayProducts(products) {
     const productGrid = document.querySelector('.product-grid');
     if (!productGrid) return;
 
+<<<<<<< HEAD
+=======
+    // EMPTY STATE HANDLING
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
     if (!products || products.length === 0) {
         productGrid.innerHTML = '<p style="color:gray; text-align:center; width:100%; padding: 20px;">No products available.</p>';
         return;
     }
 
+<<<<<<< HEAD
     const userEmail = localStorage.getItem('userName');
     const isAdmin = userEmail && userEmail.includes('admin');
 
+=======
+    //DYNAMIC RENDERING
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
     productGrid.innerHTML = products.map(product => `
         <div class="product-card">
             <div class="product-image">
@@ -242,9 +331,49 @@ function displayProducts(products) {
     attachDeleteListeners();
 }
 
+<<<<<<< HEAD
 // ======================================
 // EVENT LISTENERS
 // ======================================
+=======
+//DISPLAY FEATURED & DISCOUNTED
+function displayFeaturedProducts(products) {
+    const featuredContainer = document.getElementById('featured-products');
+    const discountedContainer = document.getElementById('discounted-products');
+    
+    if (featuredContainer) {
+        const featured = products.slice(0, 4);
+        featuredContainer.innerHTML = featured.map(product => `
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="${product.imageUrl || 'https://via.placeholder.com/200x200?text=No+Image'}" alt="${product.name}">
+                </div>
+                <h3>${product.name}</h3>
+                <p class="price">₱${product.price.toFixed(2)}</p>
+                <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+            </div>
+        `).join('');
+    }
+
+    if (discountedContainer) {
+        const discounted = products.slice(4, 8);
+        discountedContainer.innerHTML = discounted.map(product => `
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="${product.imageUrl || 'https://via.placeholder.com/200x200?text=No+Image'}" alt="${product.name}">
+                </div>
+                <h3>${product.name}</h3>
+                <p class="price">₱${product.price.toFixed(2)}</p>
+                <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+            </div>
+        `).join('');
+    }
+    
+    attachCartListeners();
+}
+
+//EVENT LISTENERS
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 function setupEventListeners() {
     const applyBtn = document.getElementById('apply-filters');
     const resetBtn = document.getElementById('reset-filters');
@@ -255,7 +384,11 @@ function setupEventListeners() {
     if(checkoutBtn) checkoutBtn.addEventListener('click', () => { clearCart(); alert('Thank you!'); });
 }
 
+<<<<<<< HEAD
 // APPLY FILTERS
+=======
+//APPLY FILTERS
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 async function applyFilters() {
     try {
         const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
@@ -288,9 +421,13 @@ async function applyFilters() {
     } catch(e) { console.error(e); }
 }
 
+<<<<<<< HEAD
 // ======================================
 // CART FUNCTIONALITY
 // ======================================
+=======
+//CART FUNCTIONALITY
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 function attachCartListeners() {
     document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.removeEventListener('click', handleAddToCart);
@@ -358,9 +495,13 @@ function displayCartItems() {
     });
 }
 
+<<<<<<< HEAD
 // ======================================
 // SIGNUP FUNCTIONALITY
 // ======================================
+=======
+//SIGNUP FUNCTIONALITY
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 function setupSignupForm() {
     const form = document.querySelector('.signup-form');
     if(!form) return;
@@ -403,6 +544,7 @@ function setupSignupForm() {
     });
 }
 
+<<<<<<< HEAD
 // ======================================
 // LOGIN FUNCTIONALITY
 // ======================================
@@ -462,6 +604,9 @@ function logoutUser() {
 // ======================================
 // DISPLAY USER NAME
 // ======================================
+=======
+//DISPLAY USER NAME
+>>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 function displayUserName() {
     const name = localStorage.getItem('userName');
     const h1 = document.querySelector('h1');
