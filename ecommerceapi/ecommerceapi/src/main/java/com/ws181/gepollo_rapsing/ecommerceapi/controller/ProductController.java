@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 =======
 @CrossOrigin(origins = "*") // ADD THIS LINE HERE
 >>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
+
 public class ProductController {
 
     private final ProductService productService;

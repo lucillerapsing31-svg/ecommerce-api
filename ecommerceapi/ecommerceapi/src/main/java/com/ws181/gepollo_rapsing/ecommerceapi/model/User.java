@@ -1,6 +1,5 @@
 package com.ws181.gepollo_rapsing.ecommerceapi.model;
 
-<<<<<<< HEAD
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,13 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-=======
-import jakarta.persistence.*; //MUST BE jakarta NOT javax
->>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails { // Implement UserDetails here
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,9 +43,12 @@ public class User implements UserDetails {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
+    // IMPORTANT: Spring Security expects this getter to return the actual password.
+    // If you have a separate field for `confirmPassword`, that's fine,
+    // but getPassword() should return the hashed password used for authentication.
+    @Override // This annotation indicates it's an override from UserDetails
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-<<<<<<< HEAD
 
     public String getConfirmPassword() { return confirmPassword; }
     public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
@@ -58,30 +57,27 @@ public class User implements UserDetails {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
 
-    // Security Methods
+    // Security Methods (from UserDetails interface)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Use the role from database instead of hardcoded
+        // Convert the role string into a GrantedAuthority
         return Collections.singletonList(new SimpleGrantedAuthority(this.role));
     }
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.email; // The email is used as the username for authentication
     }
 
     @Override
-    public boolean isAccountNonExpired() { return true; }
+    public boolean isAccountNonExpired() { return true; } // You might implement logic here later
 
     @Override
-    public boolean isAccountNonLocked() { return true; }
+    public boolean isAccountNonLocked() { return true; } // You might implement logic here later
 
     @Override
-    public boolean isCredentialsNonExpired() { return true; }
+    public boolean isCredentialsNonExpired() { return true; } // You might implement logic here later
 
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { return true; } // You might implement logic here later
 }
-=======
-}
->>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
