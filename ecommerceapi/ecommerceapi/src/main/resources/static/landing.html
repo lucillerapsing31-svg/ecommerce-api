@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -44,6 +44,145 @@
     </footer>
     
     <script src="script.js"></script>
-    <!-- REMOVED the duplicate test script -->
+    <!-- ✅ FULL WORKING CODE — REGISTER → LOGIN → LOAD PRODUCTS -->
+    <script>
+        // ==============================================
+        // ✅ STEP 1: REGISTER USER (RUN ONCE ONLY)
+        // ==============================================
+        fetch("http://localhost:8080/api/v1/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                "fullname": "Lucille Rapsing",
+                "email": "lucille@example.com",
+                "password": "123456",
+                "role": "ROLE_USER"
+            })
+        })
+        .then(res => res.json())
+        .then(data => console.log("✅ REGISTERED / ALREADY EXISTS:", data))
+        .catch(err => console.log("ℹ️ Register note:", err));
+
+
+        // ==============================================
+        // ✅ STEP 2: LOGIN & GET TOKEN
+        // ==============================================
+        fetch("http://localhost:8080/api/v1/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "email": "lucille@example.com",
+                "password": "123456"
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("✅ LOGIN RESULT:", data);
+            if (data.token) {
+                localStorage.setItem("jwtToken", data.token);
+                console.log("✅ TOKEN SAVED ✅", data.token);
+                alert("✅ LOGIN SUCCESS! Products loading...");
+                // ✅ Load products automatically
+                loadFeaturedProducts();
+                loadDiscountedProducts();
+            } else {
+                console.error("❌ LOGIN FAILED ❌", data);
+                alert("❌ Login failed — check console!");
+            }
+        })
+        .catch(err => console.error("❌ FETCH ERROR ❌", err));
+
+
+        // ==============================================
+        // ✅ STEP 3: LOAD FEATURED PRODUCTS
+        // ==============================================
+        function loadFeaturedProducts() {
+            const token = localStorage.getItem("jwtToken");
+            if (!token) { console.log("❌ No token!"); return; }
+
+            fetch("http://localhost:8080/api/v1/products", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(products => {
+                console.log("✅ FEATURED PRODUCTS:", products);
+                const container = document.getElementById("featured-products");
+                container.innerHTML = ""; // clear
+
+                if (products.length === 0) {
+                    container.innerHTML = "<p style='color:gray; text-align:center;'>No products available.</p>";
+                    return;
+                }
+
+                // Show first 4 products
+                products.slice(0,4).forEach(prod => {
+                    const item = document.createElement("div");
+                    item.className = "product-card";
+                    item.innerHTML = `
+                        <div class="product-image">
+                            <img src="${prod.imageUrl || 'https://via.placeholder.com/200x200?text=Product'}" alt="${prod.name}">
+                        </div>
+                        <h3>${prod.name}</h3>
+                        <p>₱ ${prod.price.toFixed(2)}</p>
+                        <button class="add-to-cart" data-id="${prod.id}">Add to Cart</button>
+                    `;
+                    container.appendChild(item);
+                });
+            })
+            .catch(err => console.error("❌ ERROR LOADING FEATURED:", err));
+        }
+
+
+        // ==============================================
+        // ✅ STEP 4: LOAD DISCOUNTED PRODUCTS
+        // ==============================================
+        function loadDiscountedProducts() {
+            const token = localStorage.getItem("jwtToken");
+            if (!token) return;
+
+            fetch("http://localhost:8080/api/v1/products", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(res => res.json())
+            .then(products => {
+                console.log("✅ DISCOUNTED PRODUCTS:", products);
+                const container = document.getElementById("discounted-products");
+                container.innerHTML = "";
+
+                // Show products under ₱100
+                const discounted = products.filter(p => p.price < 100);
+
+                if (discounted.length === 0) {
+                    container.innerHTML = "<p style='color:gray; text-align:center;'>No discounted products.</p>";
+                    return;
+                }
+
+                discounted.forEach(prod => {
+                    const item = document.createElement("div");
+                    item.className = "product-card";
+                    item.innerHTML = `
+                        <div class="product-image">
+                            <img src="${prod.imageUrl || 'https://via.placeholder.com/200x200?text=Product'}" alt="${prod.name}">
+                        </div>
+                        <h3>${prod.name}</h3>
+                        <p>₱ ${prod.price.toFixed(2)}</p>
+                        <button class="add-to-cart" data-id="${prod.id}">Add to Cart</button>
+                    `;
+                    container.appendChild(item);
+                });
+            })
+            .catch(err => console.error("❌ ERROR LOADING DISCOUNTED:", err));
+        }
+    </script>
 </body>
 </html>

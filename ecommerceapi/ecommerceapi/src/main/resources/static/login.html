@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30,45 +30,43 @@
     </div>
 
     <script>
-        // Helper to get cookie
-        function getCookie(name) {
-            let value = "; " + document.cookie;
-            let parts = value.split("; " + name + "=");
-            if (parts.length === 2) return parts.pop().split(";").shift();
-        }
+        // ✅ NO MORE CSRF — NOT NEEDED FOR JWT
 
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault(); // Stop normal submit
 
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
-            const csrfToken = getCookie('XSRF-TOKEN');
 
             try {
-                const response = await fetch('http://localhost:8080/login', {
+                // ✅ USE CORRECT JWT LOGIN API URL
+                const response = await fetch('http://localhost:8080/api/v1/auth/login', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-XSRF-TOKEN': csrfToken
+                        'Content-Type': 'application/json' // ✅ JSON format
                     },
-                    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
-                    credentials: 'include' //Send cookies
+                    body: JSON.stringify({ // ✅ Send JSON data
+                        email: email,
+                        password: password
+                    })
                 });
 
-                if(response.ok) {
-                    window.location.href = 'products.html'; // Redirect on success
+                const data = await response.json();
+
+                if(response.ok && data.token) {
+                    // ✅ SAVE TOKEN & USER INFO
+                    localStorage.setItem('jwtToken', data.token);
+                    localStorage.setItem('userEmail', data.email);
+                    localStorage.setItem('userName', email.split('@')[0]); // save name
+
+                    alert('✅ Login successful!');
+                    window.location.href = 'landing.html'; // ✅ Redirect to landing page
                 } else {
-                    alert('Login failed! Check email and password.');
+                    alert('❌ Login failed! Check email and password.');
                 }
             } catch(err) {
-                alert('Error: ' + err.message);
+                alert('❌ Error: ' + err.message + ' — Cannot connect to server.');
             }
-        });
-
-        // Load token on page start
-        document.addEventListener('DOMContentLoaded', function() {
-            // Visit /login first to get cookie if not present
-            fetch('http://localhost:8080/login', { credentials: 'include' });
         });
     </script>
 </body>

@@ -1,4 +1,4 @@
-package com.ws181.gepollo_rapsing.ecommerceapi.service;
+ package com.ws181.gepollo_rapsing.ecommerceapi.service;
 
 import com.ws181.gepollo_rapsing.ecommerceapi.model.User;
 import com.ws181.gepollo_rapsing.ecommerceapi.repository.UserRepository;
@@ -19,9 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
-        return user; // Since our User class already implements UserDetails
+        if (user == null) throw new UsernameNotFoundException("User not found: " + email);
+        return user;
     }
 }

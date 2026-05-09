@@ -14,12 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/products")
-<<<<<<< HEAD
-@CrossOrigin(origins = "*")
-=======
-@CrossOrigin(origins = "*") // ADD THIS LINE HERE
->>>>>>> 32c9a677cdae3622cc79aab8509f0fda203e5eb5
-
+@CrossOrigin(origins = "*") // Keep only this line and remove the conflict markers
 public class ProductController {
 
     private final ProductService productService;

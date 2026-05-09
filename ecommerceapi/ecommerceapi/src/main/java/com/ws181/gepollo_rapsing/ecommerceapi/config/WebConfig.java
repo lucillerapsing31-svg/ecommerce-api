@@ -1,6 +1,7 @@
-package com.ws181.gepollo_rapsing.ecommerceapi.config;
+ package com.ws181.gepollo_rapsing.ecommerceapi.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -8,11 +9,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(@NonNull CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*") // ALLOW ANY ORIGIN
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*") // ALLOW ANY HEADERS
-                .allowCredentials(false);
+                .allowedOrigins(
+                    "http://127.0.0.1:5500",
+                    "http://localhost:5500"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
